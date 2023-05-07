@@ -117,6 +117,11 @@ class ProductController extends Controller
     } else {
       return response()->json(['status' => 101, 'message' => 'Something Went Wrong']);
     }
-
   }
+  
+   public function productList(){
+     $products = Product::all();
+     return  view('product-show',['products' => $products]);
+   }
+  
 }
