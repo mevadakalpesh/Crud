@@ -63,6 +63,8 @@
                                     </a>
                                 @endif
                             </div>
+                            <a href="{{route('oauth.redirect','github')}}" class="btn-info btn">Login with github</a>
+                            <a href="{{route('oauth.redirect','google')}}" class="btn-danger btn">Login with google</a>
                         </div>
                     </form>
                 </div>

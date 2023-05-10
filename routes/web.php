@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RazorpayController;
 use App\Http\Controllers\FileImportController;
+use App\Http\Controllers\SocialiteAuthController;
 
 use App\Models\Product;
 use App\Models\Menu;
@@ -31,6 +32,10 @@ Auth::routes();
 Route::get('upload-file-view',[FileImportController::class,'index'])->name('file-import-view');
 Route::post('uploadFile',[FileImportController::class,'uploadFile'])->name('uploadFile');
 Route::get('get-batch-by-id/{batchId}',[FileImportController::class,'getBatchById'])->name('getBatchById');
+
+//OAuth Routes
+Route::get('auth/{provider}/redirect',[SocialiteAuthController::class,'redirect'])->name('oauth.redirect');
+Route::get('auth/{provider}/callback',[SocialiteAuthController::class,'callback'])->name('oauth.callback');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 

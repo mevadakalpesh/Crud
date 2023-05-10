@@ -14,7 +14,7 @@
   @endif
 
   <div id="progress-section" style="display:none;">
-    
+
   </div>
 
 
@@ -31,10 +31,10 @@
 
 @push('js')
 <script>
-var apiTimer = null;
-var intervalTime = 1000;
+  var apiTimer = null;
+  var intervalTime = 1000;
   $('#import-form').submit(function(e) {
-    
+
     e.preventDefault();
     let formData = new FormData(this);
     let form = $(this);
@@ -62,55 +62,57 @@ var intervalTime = 1000;
   });
   startLoading();
   function startLoading() {
-  var getBatchByIdUrl = "{{ route('getBatchById','DUMYID') }}";
+    var getBatchByIdUrl = "{{ route('getBatchById','DUMYID') }}";
     let batchId = localStorage.getItem('batch_id');
-    getBatchByIdUrl = getBatchByIdUrl.replace('/DUMYID','/'+batchId);
+    getBatchByIdUrl = getBatchByIdUrl.replace('/DUMYID', '/'+batchId);
     if (batchId) {
-    // apiTimer = setInterval(getBatchData(getBatchByIdUrl,batchId),intervalTime);
-    apiTimer = setInterval(function() {
-      getBatchData(getBatchByIdUrl,batchId);
-    }, intervalTime);
+      // apiTimer = setInterval(getBatchData(getBatchByIdUrl,batchId),intervalTime);
+      apiTimer = setInterval(function() {
+        getBatchData(getBatchByIdUrl, batchId);
+      }, intervalTime);
     }
   }
-  
-  function getBatchData(batchUrl,batchId){
-      
-      $('#import-form').hide();
-      $('#progress-section').show();
-      $.ajax({
-        url: batchUrl,
-        method: "GET",
-        dataType:'JSON',
-        data: {batchId:batchId},
-        success: function(data) {
-          console.log('startLoading',data);
-          if (data.status == 200) {
-            //data.result.progress
-            //data.result.totalJobs
-            //data.result.processedJobs
-            //data.result.pendingJobs
-            var htmlData = '<div class="progress"><div class="progress-bar" role="progressbar" style="width: '+data.result.progress+'%;" aria-valuenow="'+data.result.progress+'" aria-valuemin="0" aria-valuemax="100">'+data.result.progress+'%</div></div><p>'+data.result.processedJobs+' completed out of '+data.result.totalJobs+'</p>';
-            $('#progress-section').html(htmlData);
-            if(data.result.progress == 100){
-              clearInterval(apiTimer);
-              apiTimer = null;
-              localStorage.removeItem('batch_id');
-              $('#import-form').reset();
-              $('#import-form').show();
-              $('#progress-section').hide();
-              toastr.success('File has been impored Successfully..!');
-            }
-          } else {
-            toastr.error(data.message);
+
+  function getBatchData(batchUrl, batchId) {
+
+    $('#import-form').hide();
+    $('#progress-section').show();
+    $.ajax( {
+      url: batchUrl,
+      method: "GET",
+      dataType: 'JSON',
+      data: {
+        batchId: batchId
+      },
+      success: function(data) {
+        console.log('startLoading', data);
+        if (data.status == 200) {
+          //data.result.progress
+          //data.result.totalJobs
+          //data.result.processedJobs
+          //data.result.pendingJobs
+          var htmlData = '<div class="progress"><div class="progress-bar" role="progressbar" style="width: '+data.result.progress+'%;" aria-valuenow="'+data.result.progress+'" aria-valuemin="0" aria-valuemax="100">'+data.result.progress+'%</div></div><p>'+data.result.processedJobs+' completed out of '+data.result.totalJobs+'</p>';
+          $('#progress-section').html(htmlData);
+          if (data.result.progress == 100) {
+            clearInterval(apiTimer);
+            apiTimer = null;
+            localStorage.removeItem('batch_id');
+            $('#import-form').reset();
+            $('#import-form').show();
+            $('#progress-section').hide();
+            toastr.success('File has been impored Successfully..!');
           }
-        },
-        error: function(e) {
-          console.log(e);
-        },
-       // cache: false,
-        //contentType: false,
-        //processData: false
-      });
+        } else {
+          toastr.error(data.message);
+        }
+      },
+      error: function(e) {
+        console.log(e);
+      },
+      // cache: false,
+      //contentType: false,
+      //processData: false
+    });
   }
 
 </script>
