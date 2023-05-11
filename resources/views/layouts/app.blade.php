@@ -61,11 +61,39 @@
                                 </li>
                             @endif
                         @else
-                         <li class="nav-item dropdown">
+                        
+                          @if(auth()->user()->can('product-read') || auth()->user()->can('product-read') )
+                            <li class="nav-item dropdown">
                                 <a class="nav-link" href="{{route('product.index')}}" >
                                     Product
                                 </a>
                             </li>
+                            @endif
+                            
+                             @if(auth()->user()->can('role-read') || auth()->user()->can('role-read') )
+                            <li class="nav-item dropdown">
+                                <a class="nav-link" href="{{route('role.index')}}" >
+                                    Role
+                                </a>
+                            </li>
+                            @endif
+                            
+                            @if(auth()->user()->can('user-read') || auth()->user()->can('user-read') )
+                            <li class="nav-item dropdown">
+                                <a class="nav-link" href="{{route('user.index')}}" >
+                                   Users
+                                </a>
+                            </li>
+                            @endif
+                            
+                            @if(auth()->user()->can('file-read') ||auth()->user()->can('file-read') )
+                            <li class="nav-item dropdown">
+                                <a class="nav-link" href="{{route('file-import-view')}}" >
+                                    Import CSV File
+                                </a>
+                            </li>
+                           @endif
+                          
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }}
