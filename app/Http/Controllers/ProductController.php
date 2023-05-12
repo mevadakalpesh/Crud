@@ -62,7 +62,7 @@ class ProductController extends Controller
     $data = [
       'name' => $request->name,
       'amount' => $request->amount,
-      'image' => storeFile(Product::$filePath, $request->image, 'product'),
+      'image' =>storeFile('product-images/', $request->file('image'), 'product'),
       'status' => $request->status,
       'description' => $request->description ?? null,
     ];

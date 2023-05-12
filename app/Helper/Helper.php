@@ -8,6 +8,7 @@ function storeFile($folder,$file,$prefix){
   return $fileName;
 }
 
+
 function sanitize($line){
    $clean = iconv('UTF-8', 'ASCII//TRANSLIT', $line); // attempt to translate similar characters
    $clean = preg_replace('/[^\w]/', '', $clean); // drop anything but ASCII
