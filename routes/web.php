@@ -30,7 +30,7 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('assign-role',function (){
+Route::get('assign-role', function () {
   $user = App\Models\User::find(2);
   $user->assignRole([1]);
   dd('done');
@@ -47,8 +47,10 @@ Route::get('auth/{provider}/callback', [SocialiteAuthController::class, 'callbac
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+Route::group(['middleware' => 'auth'],function(){
 Route::resource('product', ProductController::class);
 Route::get('product-listing', [ProductController::class, 'productList'])->name('productList');
+});
 
 //Role Routes
 Route::resource('role', RoleController::class);
@@ -100,124 +102,60 @@ Route::get('test1', function() {
 
 Route::get('test', function() {
 
-$month = 'all';
 
-$startWeek = Carbon::now()->subWeek()->startOfWeek();
-$endWeek = Carbon::now()->subWeek()->endOfWeek();
-//dd($startWeek,$endweek);
+  function testdata($num1, $num2) {
+    $main_array = [];
+    $status = true;
+    $sum2bkp = $num2;
+    sort($num2);
+    sort($num1);
+    for ($i = 0; $i < count($num1); $i++) {
+      $main_array[] = $num1[$i];
 
-$products = Product::whereBetween('created_at',[$startWeek,$endWeek])->get();
-dd($products);
-
-
-  function getstring($s) {
-    if (!$s) {
-      return 1;
-    }
-    $string_array = str_split($s);
-    $main_arry = [];
-    $temp_arry = [];
-    foreach ($string_array as $value) {
-      if (!in_array($value, $temp_arry)) {
-        $temp_arry[] = $value;
-      } else {
-        $main_arry[] = $temp_arry;
-        $temp_arry = [];
-        $temp_arry[] = $value;
-      }
-    }
-    $main_arry[] = $temp_arry;
-    dd($main_arry);
-    return count(max($main_arry));
-  }
-
-  //echo getstring('dvdf');
-  //echo longstring('bbbbb');
-  //echo longstring('pwwkew');
-  //echo longstring('aab');
-
-
-  function longstring($s) {
-    if ($s == "") {
-      return 0;
-    } else if ($s == " " || strlen($s) == 1) {
-      return 1;
-    }
-    $array_ste = str_split($s);
-
-    if (count(array_unique($array_ste)) == count($array_ste)) {
-      return count($array_ste);
-    }
-
-    $attau = [];
-    for ($i = 0; $i < count($array_ste); $i++) {
-      $findIndez = strpos($s, $array_ste[$i], $i+1);
-      $subStrLenth = $i;
-      if (!$findIndez) {
-        $findIndez = $i+1;
-        $subStrLenth = 0;
-      }
-      $substring = substr($s, $i, $findIndez-$subStrLenth);
-      if ($i == 1) {
-        //dd($s,$array_ste[$i],$i+1);
-      }
-
-      $attau[] = $substring;
-    }
-
-
-    max(array_map('strlen', $attau));
-    return strlen(max($attau));
-  }
-  //echo longstring('abcabcbb');
-  //echo longstring('bbbbb');
-  //echo longstring('pwwkew');
-  //echo longstring('aab');
-
-
-
-
-  function test($strs) {
-
-    if ($strs == "") {
-      return 0;
-    }
-    $loopq = 0;
-    $result = [];
-    for ($i = 0; $i < count($strs); $i++) {
-      if ($loopq == 0) {
-        $result = str_split($strs[0]);
-        $loopq = 1;
-      }
-      $curent_str = str_split($strs[$i]);
-      $check = 0;
-       
-      $result = array_intersect_uassoc($result, $curent_str, function ($a, $b) use($result, $curent_str)  {
-       // echo 'a => ' .$a .' b => '.$b .'<br>';
-        if ($a === $b) {
-          return 0;
-        } else {
-          if(count($curent_str) > 15){
-            return 1;
-          }else{
-            return -1;
-          }
+      $sumnext = isset($num1[$i+1]) ? $num1[$i+1] : $num1[count($num1) - 1];
+      if ($num1[$i]+1 != $sumnext && $status) {
+        
+        $search_key = array_search($num1[$i]+1, $num2);
+        if ($search_key !== false) {
+          $main_array[] = $num2[$search_key];
         }
-        return ($a > $b)?1:-1;
-      });
-      
+        if ((count($num1) - 1) == $i) {
+            $main_array = array_merge($main_array, $num2);
+        } 
+        unset($num2[$search_key]);
+      }
     }
-    
-    return count($result) > 0 ? implode('',
-      $result) : "";
+    if (count($main_array) == 0) {
+      $main_array = $sum2bkp;
+    }
+    sort($main_array);
+  
 
+    $first_val = $main_array[(count($main_array) / 2)] ?? 0;
+    $secod_val = $main_array[(count($main_array) / 2) - 1] ?? 0;
+    $first_val = is_array($first_val) ? $first_val[0] : $first_val;
+    $secod_val = is_array($secod_val) ? $secod_val[0] : $secod_val;
+    if (count($main_array) % 2 == 0) {
+      return number_format(($first_val+$secod_val) / 2, 5, ".");
+    } else {
+      return number_format($first_val, 5, ".");
+    }
   }
-   //echo '1 ' . test(["flower", "flow", "flight"]);
-  // echo '2 ' .  test(["c","acc","ccc"]);
- // echo '3 ' .  test(["reflower","flow","flight"]);
-  //echo '4 ' .  test(["aab","aaaaaaaaaaaaaaaaa"]);
- //echo '4 ' . test(["aab","aaaaaaaaaaaaaaaaaaa"]);
-
+  
+  
+  function testdata1($num1,$num2){
+    $num1sum = array_sum($num1);
+    $num2sum = array_sum($num2);
+     $data = ($num1sum + $num2sum) / count(array_merge($num1,$num2));
+     return number_format($data,5);
+  }
+  //echo testdata([1, 3], [2]); //2.00000
+  //echo testdata([1, 2], [3, 4]); //2.50000
+  //echo testdata([3],[-2,-1]);  //-1.00000
+  //echo testdata([2,2,4,4],[2,2,4,4]);  //3.00000
+  //echo testdata([1,2],[3,4]);  //3.00000
+  //echo testdata([2,2,4,4][2,2,4,4]);  //3.00000
+  echo testdata([1,3],[2,7]);  //3.00000
 
 
 });

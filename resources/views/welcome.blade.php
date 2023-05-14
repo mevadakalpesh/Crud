@@ -71,46 +71,31 @@
       @endauth
     </div>
     @endif
-
-    <div class="max-w-7xl mx-auto p-6 lg:p-8">
-
-      <div class="flex justify-center mt-16 px-0 sm:items-center sm:justify-between">
         
         
-
-        <div class="chee">
-          <?php 
-          $color = [
-            '3' => 'yellow',
-            '5' => 'orange',
-            '7' => 'red',
-            '9' => 'green',
-            '11' => 'pink',
-            '13' => 'yellow',
-            '15' => 'orange',
-            ];
-          $html = '';
-          for ($i = 1; $i <= 8; $i++) {
-             $html .= '<div class="row">';
-                 for ($b = 1; $b <= 8; $b++) {
-                   $total = $i + $b;
-                   if($total % 2 == 0){
-                     $html .= ' <div class="box white">'.($i * $b) .'</div>';
-                   }else{
-                    $html .= ' <div class="box " style="background:'.$color[$total].';">'. ($i * $b)  .'</div>';
-                   }
-                 }
-             $html .= '</div>';
-          }
-    
-          echo $html;
-        ?>
+        <div class="container">
+          <div class="row">
+            <div class="menu">
+              <button type="button" id="btn">click</button>
+            </div>
+            
+            <div style="background:red;" class="menu-data bg-info">
+                  <ul>
+                    <li>home</li>
+                    <li>usus</li>
+                    <li>xjjxj</li>
+                  </ul>
+            </div>
+            
+          </div>
         </div>
-
 
 
       </div>
     </div>
   </div>
+  <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+  
+  
 </body>
 </html>

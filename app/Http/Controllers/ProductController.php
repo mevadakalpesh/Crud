@@ -10,6 +10,8 @@ use App\Http\Requests\ProductAddRequest;
 use App\Http\Requests\ProductUpdateRequest;
 
 use Illuminate\Support\Facades\Validator;
+use App\Http\Resources\ProductResource;
+
 
 class ProductController extends Controller
 {
@@ -21,7 +23,7 @@ class ProductController extends Controller
   * Display a listing of the resource.
   */
   public function index(Request $request) {
-    if ($request->ajax()) {
+   if ($request->ajax()) {
       $exceptCol = ['deleted_at','updated_at'];
       $pendingStatus = Product::$pendingStatus;
       $completedStatus = Product::$completedStatus;
@@ -40,12 +42,13 @@ class ProductController extends Controller
         return $btn;
       })
       ->editColumn('image', function($product) {
-        $image = '<img src="'.$product->image.'" class="listing-image">';
+        $image = '<img src="'.$product->product_thum_img.'"
+        class="listing-image1">';
         return $image;
       })
       ->rawColumns(['image', 'action'])
       ->make(true);
-    }
+   }
     return view('products.product-listing');
   }
 
@@ -123,5 +126,20 @@ class ProductController extends Controller
      $products = Product::all();
      return  view('product-show',['products' => $products]);
    }
+  
+  
+  public function getProductApi(Request $request){
+     response()->json([
+      'status' => 200,
+      'message' => 'Success',
+      'data' => '' ,
+    ]);
+    
+    return ProductResource::collection(Product::all())
+    ->additional([
+      'status' => 200,
+      'message' => 'Succsss'
+      ]);
+  }
   
 }

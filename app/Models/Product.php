@@ -13,11 +13,13 @@ class Product extends Model
     use HasFactory,SoftDeletes;
     
     protected $guarded = [];
+    protected $appends =['product_thum_img'];
     protected $casts = [
       "amount" => "decimal:2",
       "created_at" =>'date:Y-m-d'
     ];
     
+    //make sure add forlder like thubmanil
     public static $filePath = 'product-images/';
     
     //status 1 : pending , 2 : completed
@@ -34,5 +36,12 @@ class Product extends Model
         return Attribute::make(
             get: fn (string $value) =>  (!blank($value))  ? config('constant.storage_path').self::$filePath.$value : config('constant.default_image').$value,
         );
+    }
+    
+    protected function getProductThumImgAttribute()
+    {    
+        return $this->attributes['product_thum_img'] = (!blank($this->attributes["image"]))  ?
+        config('constant.storage_path').self::$filePath.'thumb/'.$this->attributes["image"] :
+        config('constant.default_image').$this->attributes["image"];
     }
 }
