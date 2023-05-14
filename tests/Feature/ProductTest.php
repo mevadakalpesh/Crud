@@ -94,7 +94,7 @@ class ProductTest extends TestCase
     $this->create_product();
     $product = Product::first();
     $response = $this->delete(route('product.destroy', $product->id));
-    $this->assertDatabaseHas('products', ['deleted_at' => null]);
+    $this->assertDatabaseMissing('products', ['deleted_at' => null]);
     $response->assertStatus(200);
   }
 }
